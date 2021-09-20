@@ -8,6 +8,8 @@ class SessionsController < ApplicationController
     # ユーザーがデータベースにあり、かつ、認証に成功した場合にのみ
     # authenticateメソッドパスワードを引数としてユーザーの認証を行うことができる
     if user && user.authenticate(params[:session][:password])
+      log_in user
+      redirect_to user
     else
       # flash.nowのメッセージはその後リクエストが発生したときに消滅
       flash.now[:danger] = 'Invalid email/password combination'

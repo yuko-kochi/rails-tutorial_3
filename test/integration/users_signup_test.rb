@@ -14,7 +14,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_select 'div.alert'
     assert_select 'form[action="/signup"]'
   end
-  
+
     test "valid signup information" do
     get signup_path
     # assert_differenceブロック内の処理を実行する直前と、実行した直後のUser.countの値を比較
@@ -28,6 +28,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_template 'users/show'
     assert_not flash.empty?
+    assert is_logged_in?
   end
-  
+
 end

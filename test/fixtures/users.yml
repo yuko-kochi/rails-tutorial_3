@@ -1,1 +1,4 @@
-
+tanaka:
+  name: Tanaka
+  email: tanaka@g.com
+  password_digest: <%= User.digest('password') %>

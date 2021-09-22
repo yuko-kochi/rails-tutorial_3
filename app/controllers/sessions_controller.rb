@@ -9,6 +9,7 @@ class SessionsController < ApplicationController
     # authenticateメソッドパスワードを引数としてユーザーの認証を行うことができる
     if user && user.authenticate(params[:session][:password])
       log_in user
+      remember user
       redirect_to user
     else
       # flash.nowのメッセージはその後リクエストが発生したときに消滅
@@ -18,7 +19,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    log_out
+    log_out if logged_in?
     redirect_to root_url
   end
 end

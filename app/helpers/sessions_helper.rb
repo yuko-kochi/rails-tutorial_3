@@ -12,6 +12,11 @@ module SessionsHelper
     cookies.permanent[:remember_token] = user.remember_token
   end
 
+  # 渡されたユーザーがログイン済みユーザーであればtrueを返す
+  def current_user?(user)
+    user == current_user
+  end
+
   # 記憶トークンcookieに対応するユーザーを返す
   def current_user
     if (user_id = session[:user_id])
@@ -42,6 +47,23 @@ module SessionsHelper
     forget(current_user)
     session.delete(:user_id)
     @current_user = nil
+  end
+
+  # 記憶したURL (もしくはデフォルト値) にリダイレクト
+  def redirect_back_or(default)
+    # 値がnilでなければsession[:forwarding_url]を評価し、そうでなければデフォルトのURLを使う
+    redirect_to(session[:forwarding_url] || default)
+    # session.delete(:forwarding_url) という行を通して転送用のURLを削除している
+    # これをやっておかないと、次回ログインしたときに保護されたページに転送されてしまい、ブラウザを閉じるまでこれが繰り返されてしまう
+    session.delete(:forwarding_url)
+  end
+
+  # アクセスしようとしたURLを覚えておく
+  def store_location
+    # request.original_urlでリクエスト先が取得できる
+    # リクエストが送られたURLをsession変数の:forwarding_urlキーに格納している
+    # ただし、GETリクエストが送られたときだけ格納するようする
+    session[:forwarding_url] = request.original_url if request.get?
   end
 
 end

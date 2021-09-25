@@ -1,8 +1,15 @@
 class UsersController < ApplicationController
   # before_actionメソッド 何らかの処理が実行される直前に特定のメソッドを実行する仕組み
   # :onlyオプション (ハッシュ) を渡すことで、:editと:updateアクションだけにこのフィルタが適用されるように制限をかける
-  before_action :logged_in_user, only: [:edit, :update]
+  before_action :logged_in_user, only: [:index, :edit, :update]
   before_action :correct_user,   only: [:edit, :update]
+
+  def index
+    # paginateでは、キーが:pageで値がページ番号のハッシュを引数に取る
+    # User.paginateは、:pageパラメーターに基いて、データベースからひとかたまりのデータ (デフォルトでは30) を取り出す
+    # ndexアクション内のallをpaginateメソッドに置き換える。ここで:pageパラメーターにはparams[:page]
+    @users = User.paginate(page: params[:page])
+  end
 
   def new
     @user = User.new

@@ -1,12 +1,12 @@
 <!--any?メソッドはちょうどempty?と逆の動作で、要素が1つでもある場合はtrue、ない場合はfalseを返す-->
-<% if @user.errors.any? %>
+<% if object.errors.any? %>
   <div id="error_explanation">
     <div class="alert alert-danger">
       <!--pluralizeの最初の引数に整数が与えられると、それに基づいて2番目の引数の英単語を複数形に変更したものを返す-->
-      The form contains <%= pluralize(@user.errors.count, "error") %>.
+      The form contains <%= pluralize(object.errors.count, "error") %>.
     </div>
     <ul>
-    <% @user.errors.full_messages.each do |msg| %>
+    <% object.errors.full_messages.each do |msg| %>
       <li><%= msg %></li>
     <% end %>
     </ul>
